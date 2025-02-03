@@ -1,0 +1,40 @@
+
+syntax = "proto3";
+option go_package = "github.com/maslias/common/proto/user;user";
+package user;
+
+message User {
+    uint64 id = 1;
+    string username = 2;
+    string email = 3;
+}
+
+message GetUserByIdRequest {
+    uint64 id = 1;
+}
+
+message GetUserByEmailRequest {
+    string email = 1;
+}
+
+message GetUserResponse {
+    bool exist = 1;
+    User user = 2;
+}
+
+message CreateUserRequest {
+    string username = 1;
+    string email = 2;
+    bytes password = 3;
+}
+
+message CreateUserResponse {
+    bool success = 1;
+    string msg = 2;
+}
+
+service UserServcie {
+    rpc GetUserById(GetUserByIdRequest) returns (GetUserResponse);
+    rpc GetUserByEmail(GetUserByEmailRequest) returns (GetUserResponse);
+    rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
+}

@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+session=$1
+cmd=$2
+whicher=$(which $cmd)
+
+if [[ ! -x $whicher ]]; then
+    echo "cmd is not executable"
+    exit
+fi
+
+if ! tmux has-session -t=$session 2>/dev/null; then
+    tmux new-session -d -s $session -c $HOME
+fi
+
+if ! tmux list-panes -t $session -F "#{pane_current_command}" | grep -q $cmd; then
+    tmux send-keys -t $session $cmd C-m
+fi
+
+if [[ "$TMUX" ]]; then
+    tmux switch-client -t $session
+else
+    tmux attach -t $session
+fi

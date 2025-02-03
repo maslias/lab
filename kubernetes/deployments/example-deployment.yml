@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: volume-persistentclaim
+  name: volume-persistentclaim
+  namespace: volume-persistentclaim
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: volume-persistentclaim
+  template:
+    metadata:
+      labels:
+        app: volume-persistentclaim
+    spec:
+      volumes:
+        - name: vol
+          persistentVolumeClaim:
+            claimName: volume-persistentclaim
+      containers:
+        - image: ghcr.io/mealie-recipes/mealie:v2.4.2
+          name: mealie
+          ports:
+            - containerPort: 9000
+          volumeMounts:
+            - mountPath: /app/data
+              name: vol

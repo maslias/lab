@@ -1,0 +1,5 @@
+*.env
+*.hurl
+Makefile
+.private/
+bin/

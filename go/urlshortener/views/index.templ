@@ -1,0 +1,25 @@
+package views
+
+templ MakeIndex() {
+	@Base() {
+		<div class="hero min-h-screen">
+			<div class="hero-content text-center">
+				<div class="max-w-md">
+					<h1 class="text-5xl font-bold">
+                    <a href="/">Url Shortis</a>
+                    </h1>
+                    <form class="py-6" hx-post="/shortenurl" hx-trigger="submit">
+						<input
+							class="input input-bordered max-w-xs"
+							type="text"
+                            name="to-shorten-url"
+							placeholder="Url here"
+							required
+						/>
+						<button class="btn btn-primary" type="submit">Shorten up</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	}
+}

@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+
+date=$(date '+%Y-%m-%d-%A')
+dir="dailynote"
+path="$XDG_ZETTELKASTEN_HOME"
+file=$path$date".md"
+session=$dir
+
+if [ ! -d $path ]; then
+    mkdir $path
+fi
+
+if [ ! -f $file ]; then
+    cat <<EOF >$file
+date: $date
+tags:
+ - daily
+
+---
+
+## Daily note 
+EOF
+fi
+
+cmd="nvim"
+
+if ! tmux has-session -t="$session" 2>/dev/null; then
+    # if there turn up session conflict, create subdirs for each dailynote
+    tmux new-session -d -s "$session" -c "$path" "$cmd $file"
+else
+
+    # kill multiple cmd windows
+    wtk=$(tmux list-windows -t "$session" -F '#I #W' | awk '$2 ~ "'$cmd'" {print $1}' | awk 'NR>1' | awk 'NR==1')
+    while [[ $wtk ]]; do
+        tmux kill-window -t $session:$wtk
+        wtk=$(tmux list-windows -t "$session" -F '#I #W' | awk '$2 ~ "'$cmd'" {print $1}' | awk 'NR>1' | awk 'NR==1')
+    done
+
+    # open buffer
+    if ! tmux send-keys -t "$session:$cmd" ":e $file" C-m; then
+        if ! tmux send-keys -t "$session:zsh" "$cmd $file" C-m; then
+            tmux new-window -t "$session"
+            tmux send-keys -t "$session:zsh" "$cmd $file" C-m
+        fi
+    fi
+
+    # switch to cmd window
+    if [ ! "$(tmux list-windows -t "$session" -F '#W #F' | awk '$1 ~ "'$cmd'" && $2 ~ "*" {print $1}')" ]; then
+        if ! tmux select-window -t "$session:$cmd"; then
+            tmux select-window -t "$session:zsh"
+        fi
+    fi
+fi
+
+if [[ "$TMUX" ]]; then
+    tmux switch-client -t "$session"
+else
+    tmux attach -t "$session"
+fi

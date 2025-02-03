@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: wonderland-mealie-nginx
+  name: wonderland-mealie-nginx
+  namespace: wonderland
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wonderland-mealie-nginx
+  template:
+    metadata:
+      labels:
+        app: wonderland-mealie-nginx
+    spec:
+      containers:
+        - image: ghcr.io/mealie-recipes/mealie:v2.4.2
+          name: wonderland-mealie-nginx
+          ports:
+            - containerPort: 9000

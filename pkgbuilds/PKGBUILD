@@ -1,0 +1,28 @@
+# Maintainer: Your Name <marcel.liebreich@gmail.com>
+pkgname='systemd-boot-btrfs'
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="Create automatic bootloader entries for systemd-boot, from btrfs snapshots."
+arch=('x86_64')
+url="https://github.com/maslias/systemd-boot-btrfs"
+license=('MIT')
+depends=('btrfs-progs','snapper')
+makedepends=('git')
+source=('systemd-boot-btrfs::git://github.com/maslias/systemd-boot-btrfs.git')
+sha256sums=('SKIP')
+
+pkgver() {
+    cd "$pkgname"
+    # Git, no tags available
+    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+build() {
+    cd "$pkgname"
+    make
+}
+
+package() {
+    cd "$pkgname"
+    install -Dm755 ./cmd/systemd-boot-btrfs "$pkgdir/usr/bin/systemd-boot-btrfs"
+}

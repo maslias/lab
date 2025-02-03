@@ -1,0 +1,33 @@
+
+syntax = "proto3";
+option go_package = "github.com/maslias/common/api";
+package api;
+
+message Order {
+    string Id = 1;
+    string CustomerId = 2;
+    string Status = 3;
+    repeated Item Items = 4;
+}
+
+service OrderService {
+rpc CreateOrder(CreateOrderRequest) returns (Order);
+}
+
+message Item {
+    string Id = 1;
+    string Name = 2;
+    int32 Quantity = 3;
+    string PriceId = 4;
+}
+
+
+message ItemsWithQantity {
+    string Id = 1;
+    int32 Quantity = 2;
+}
+
+message CreateOrderRequest {
+    string CustomerId = 1;
+    repeated ItemsWithQantity Items = 2;
+}

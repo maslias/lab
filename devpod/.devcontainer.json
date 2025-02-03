@@ -1,0 +1,13 @@
+{
+  "name": "devpod_universal",
+  "version": "1.0.0",
+  "image": "mcr.microsoft.com/devcontainers/base:alpine",
+  "settings": {
+    "terminal.integrated.defaultProfile.linux": "zsh",
+    "terminal.integrated.profiles.linux": {
+      "zsh": {
+        "path": "/bin/zsh"
+      }
+    }
+  }
+}

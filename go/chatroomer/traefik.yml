@@ -1,0 +1,16 @@
+global:
+  checkNewVersion: false
+  sendAnonymousUsage: false
+providers:
+  consul:
+    endpoints: "127.0.0.1:8500"
+log:
+  level: DEBUG
+api:
+  dashboard: true
+  insecure: true
+entryPoints:
+  web:
+    address: :80
+  websecure:
+    address: :443
